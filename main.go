@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
-    "os"
-    "path/filepath"
+	"path/filepath"
 )
 
 func create_dir(dirName string) {
@@ -57,7 +57,7 @@ func read_txt(fileName string) {
 	}
 }
 func write_txt(fileName string) {
-	_, err := os.Stat(fileName+".txt")
+	_, err := os.Stat(fileName + ".txt")
 	if os.IsNotExist(err) {
 		fmt.Println("Dosya bulunamadı")
 		return
@@ -90,8 +90,8 @@ func write_txt(fileName string) {
 
 	fmt.Println("Metin başarıyla dosyaya eklendi.")
 }
-func remove_dir(dirName string){
-    _, err := os.Stat(dirName)
+func remove_dir(dirName string) {
+	_, err := os.Stat(dirName)
 	if os.IsNotExist(err) {
 		fmt.Println("Hata: Dizin bulunamadı")
 		return
@@ -105,13 +105,13 @@ func remove_dir(dirName string){
 	fmt.Println("Dizin başarıyla silindi.")
 }
 func remove_txt(fileName string) {
-	_, err := os.Stat(fileName+".txt")
+	_, err := os.Stat(fileName + ".txt")
 	if os.IsNotExist(err) {
 		fmt.Println("Hata: Dosya bulunamadı")
 		return
 	}
 
-	err = os.Remove(fileName+".txt")
+	err = os.Remove(fileName + ".txt")
 	if err != nil {
 		fmt.Println("Hata:", err)
 		return
@@ -156,8 +156,8 @@ func outdir() {
 		fmt.Println("Çıkılan dizin:", currentDir)
 	}
 }
-func list(){
-    cmd := exec.Command("ls")
+func list() {
+	cmd := exec.Command("ls")
 	output, err := cmd.Output()
 	if err != nil {
 		fmt.Println("Komut çalıştırma hatası:", err)
@@ -167,20 +167,25 @@ func list(){
 	fmt.Println("dizin içeriği:")
 	fmt.Println(string(output))
 }
-
-    
-    func main() {
-fmt.Printf("Programa Hoşgeldin\nDosya Komutları:\n  ctxt(create txt):yeni bir txt dosyası oluşturmanıza olanak sağlar\n  rtxt(read txt):txt dosyanızın içeriğinizi görmenize olanak sağlar\n  wtxt(write txt): txt dosyanıza yazı yazmanıza olanak sağlar\n  rmtxt(remove txt):txt dosyanızı silmenize olanak sağlar\nDizin Komutları:\n  cdir(create dir):yeni bir dizin oluşturmanıza olanak sağlar\n  indir(in dir):içinde bulunduğunuz dizinin içindeki dizinlerin içine girmenize olanak sağlar\n  outdir(outdir):bulunduğunuz dizinden bir geri gelmenize olanak sağlar\n  rmdir(remove dir):dizininizi silmenize olanak sağlar\n")
-    for {
-        hatirlatma:="Dosya Komutları:\n  ctxt(create txt)\n  rtxt(read txt)\n  wtxt(write txt)\n  rmtxt(remove txt)\nDizin Komutları:\n  cdir(create dir)\n  indir(in dir)\n  outdir(outdir)\n  rmdir(remove dir)\nbulunduğunuz dizinin içeriğini listelemek için list yazın\nProgramı kapatmak İçin exit yazın\n"
+func clearTerminal() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	_ = cmd.Run()
+}
+func main() {
+	fmt.Printf("Programa Hoşgeldin\nDosya Komutları:\n  ctxt(create txt):yeni bir txt dosyası oluşturmanıza olanak sağlar\n  rtxt(read txt):txt dosyanızın içeriğinizi görmenize olanak sağlar\n  wtxt(write txt): txt dosyanıza yazı yazmanıza olanak sağlar\n  rmtxt(remove txt):txt dosyanızı silmenize olanak sağlar\nDizin Komutları:\n  cdir(create dir):yeni bir dizin oluşturmanıza olanak sağlar\n  indir(in dir):içinde bulunduğunuz dizinin içindeki dizinlerin içine girmenize olanak sağlar\n  outdir(outdir):bulunduğunuz dizinden bir geri gelmenize olanak sağlar\n  rmdir(remove dir):dizininizi silmenize olanak sağlar\n")
+	for {
+		hatirlatma := "Dosya Komutları:\n  ctxt(create txt)\n  rtxt(read txt)\n  wtxt(write txt)\n  rmtxt(remove txt)\nDizin Komutları:\n  cdir(create dir)\n  indir(in dir)\n  outdir(outdir)\n  rmdir(remove dir)\nbulunduğunuz dizinin içeriğini listelemek için list yazın\nProgramı kapatmak İçin exit yazın\nclr(clear)"
 		fmt.Print("Komut girin(komut hatırlatması için remember yazın)\n>>>")
 		var secim string
 		fmt.Scanln(&secim)
 		switch secim {
-        case "list":
-            list()
-        case "remember":
-            fmt.Printf("%s",hatirlatma)
+		case "clr":
+			clearTerminal()
+		case "list":
+			list()
+		case "remember":
+			fmt.Printf("%s", hatirlatma)
 		case "ctxt":
 			fmt.Print("Oluşturulacak dosyanın adı: ")
 			var fileName string
@@ -192,7 +197,7 @@ fmt.Printf("Programa Hoşgeldin\nDosya Komutları:\n  ctxt(create txt):yeni bir 
 			var fileName string
 			fmt.Scanln(&fileName)
 			read_txt(fileName)
-            fileName = ""
+			fileName = ""
 		case "wtxt":
 			fmt.Print("Değiştirmek istediğiniz dosyanın adı: ")
 			var fileName string
@@ -224,8 +229,8 @@ fmt.Printf("Programa Hoşgeldin\nDosya Komutları:\n  ctxt(create txt):yeni bir 
 			var dirName string
 			fmt.Scanln(&dirName)
 			remove_dir(dirName)
-			dirName=""
-        case "exit":
+			dirName = ""
+		case "exit":
 			fmt.Println("Program kapatılıyor...")
 			os.Exit(0)
 		default:
